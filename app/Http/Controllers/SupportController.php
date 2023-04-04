@@ -16,13 +16,34 @@ class SupportController extends Controller
         ]);
     }
 
+    /**
+     * @param $id = string | int
+     */
+    public function show($id)
+    {
+        // $support = Support::find($id)
+        // $support = Support::where('id', $id)->first();
+        // $support = Support::where('id', '!=', $id)->first();
+
+        if(!$support = Support::find($id)) {
+            return redirect()->back();
+        }
+
+        return view('admin/supports/show', compact('support'));
+    }
+
     public function create()
     {
         return view('admin/supports/create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Support $support)
     {
-        dd($request->all());
+        $data = $request->all();
+        $data['status'] = 'a';
+        
+        $support->create($data);
+
+        return redirect()->route('supports.index');
     }
 }
