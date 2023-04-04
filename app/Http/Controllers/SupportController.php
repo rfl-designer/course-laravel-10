@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Support;
 use Illuminate\Http\Request;
 
 class SupportController extends Controller
 {
-    public function index()
+    public function index(Support $support)
     {
-        return view('admin/supports/index');
+        $supports = $support->all();
+        dd($supports);
+
+        return view('admin/supports/index', [
+            'supports' => $supports
+        ]);
     }
 }
