@@ -40,7 +40,7 @@ class SupportController extends Controller
 
     public function store(StoreUpdateSupport $request , Support $support)
     {
-        $data = $request->all();
+        $data = $request->validated();
         $data['status'] = 'a';
         
         $support->create($data);
@@ -57,13 +57,13 @@ class SupportController extends Controller
         return view('admin/supports.edit', compact('support'));
     }
 
-    public function update(Request $request, Support $support, string $id)
+    public function update(StoreUpdateSupport $request, Support $support, string $id)
     {
         if(!$support = Support::find($id)) {
             return back();
         }
 
-        $support->update($request->only([
+        $support->update($request->validated([
             'subject', 'body'
         ]));
 

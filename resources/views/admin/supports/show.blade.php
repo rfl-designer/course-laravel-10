@@ -1,5 +1,11 @@
 <h1>Detalhes da dúvida {{ $support->id }}</h1> 
 
+@if ($errors->any())
+    @foreach ($errors->all() as $error)
+        {{ $error }}
+    @endforeach
+@endif
+
 <ul>
     <li>Assunto: {{ $support->subject }}</li>
     <li>Status: {{ $support->status }}</li>
