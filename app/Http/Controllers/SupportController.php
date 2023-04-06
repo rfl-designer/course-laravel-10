@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\CreateSupportDTO;
+use App\DTO\UpdateSupportDTO;
 use App\Http\Requests\StoreUpdateSupport;
 use App\Models\Support;
 use App\Services\SupportService;
@@ -11,24 +13,16 @@ class SupportController extends Controller
 {
     public function __construct(
         protected SupportService $service
-    )
-    {
-        
-    }
+    ) {}
 
     public function index(Request $request)
     {
         $supports = $this->service->getAll($request->filter);
 
-        return view('admin/supports/index', [
-            'supports' => $supports
-        ]);
+        return view('admin/supports/index', compact('support'));
     }
 
-    /**
-     * @param $id = string | int
-     */
-    public function show($id)
+    public function show(string $id)
     {
         // $support = Support::find($id)
         // $support = Support::where('id', $id)->first();
@@ -48,10 +42,9 @@ class SupportController extends Controller
 
     public function store(StoreUpdateSupport $request , Support $support)
     {
-        $data = $request->validated();
-        $data['status'] = 'a';
-        
-        $support->create($data);
+        $this->service->new(
+            CreateSupportDTO::makeFromRequest($request)
+        );
 
         return redirect()->route('supports.index');
     }
@@ -66,15 +59,15 @@ class SupportController extends Controller
         return view('admin/supports.edit', compact('support'));
     }
 
-    public function update(StoreUpdateSupport $request, Support $support, string $id)
+    public function update(StoreUpdateSupport $request, Support $support)
     {
-        if(!$support = Support::find($id)) {
+        $support = $this->service->update(
+            UpdateSupportDTO::makeFromRequest($request)
+        );
+        
+        if(!$support) {
             return back();
         }
-
-        $support->update($request->validated([
-            'subject', 'body'
-        ]));
 
         return redirect()->route('supports.index');
     }
