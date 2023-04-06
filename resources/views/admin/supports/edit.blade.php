@@ -1,5 +1,7 @@
 <h1>Dúvida {{ $support->id }}</h1>
 
+<x-alert/>
+
 <ul>
     <li>Assunto: {{ $support->subject }}</li>
     <li>Status: {{ $support->status }}</li>
