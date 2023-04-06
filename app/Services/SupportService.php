@@ -15,7 +15,7 @@ class SupportService
 
     public function getAll(string $filter = null): array
     {
-        $this->repository->getAll($filter);
+        return $this->repository->getAll($filter);
     }
 
     public function findOne(string $id): stdClass|null
